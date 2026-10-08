@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurora — О проекте</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a class="logo" href="/">✦ AURORA</a>
+    <div>
+      <a class="link" href="/">Главная</a>
+      <a class="link" href="/about.html">О проекте</a>
+    </div>
+  </nav>
+
+  <section class="section">
+    <h2>Как устроен этот проект</h2>
+    <p style="color:var(--muted)">
+      HTML-файлы упакованы в Docker-образ вместе с Nginx (<code class="inline">Dockerfile</code>).
+      Файл <code class="inline">docker-compose.yml</code> поднимает два сервиса:
+      веб-сервер (порт <code class="inline">8080 → 80</code>) и PostgreSQL
+      (порт <code class="inline">5433 → 5432</code>). Проброс портов описан в секции
+      <code class="inline">ports:</code> каждого сервиса.
+    </p>
+
+    <ul class="timeline">
+      <li><b>1. Сборка образа:</b> <code class="inline">docker compose build web</code></li>
+      <li><b>2. Запуск стека:</b> <code class="inline">docker compose up -d</code></li>
+      <li><b>3. Открыть сайт:</b> <code class="inline">http://localhost:8080</code></li>
+      <li><b>4. Подключиться к БД с хоста:</b> <code class="inline">psql -h localhost -p 5433 -U aurora_user -d aurora_db</code></li>
+    </ul>
+  </section>
+
+  <footer>© 2026 Aurora Project</footer>
+</body>
+</html>

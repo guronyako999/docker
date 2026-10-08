@@ -1,0 +1,70 @@
+# ============================================================
+# Aurora — HTML + Nginx + Backend + PostgreSQL
+# Запуск:  docker compose up -d --build
+# ============================================================
+
+services:
+  # ---------- Веб-сервер: HTML, упакованный с Nginx ----------
+  web:
+    build:
+      context: ./html-app          # где лежит Dockerfile и файлы
+      dockerfile: Dockerfile
+    image: aurora-web:latest
+    container_name: aurora-web
+    restart: unless-stopped
+    ports:
+      # ПРОБРОС ПОРТОВ: "хост:контейнер"
+      # http://localhost:8080  ->  nginx:80 внутри контейнера
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_started
+    networks: [aurora-net]
+
+  # ---------- Мини-backend: проверка подключения к PostgreSQL ----------
+  backend:
+    build: ./backend
+    image: aurora-backend:latest
+    container_name: aurora-backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: db                  # имя сервиса в docker-сети
+      DB_PORT: "5432"
+      DB_NAME: ${DB_NAME:-aurora_db}
+      DB_USER: ${DB_USER:-aurora_user}
+      DB_PASSWORD: ${DB_PASSWORD:-aurora_pass}
+    # порт backend'а наружу не проброшен — доступ только через nginx (/api/)
+    depends_on:
+      db:
+        condition: service_healthy # ждём, пока postgres реально готов
+    networks: [aurora-net]
+
+  # ---------- PostgreSQL ----------
+  db:
+    image: postgres:16-alpine
+    container_name: aurora-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-aurora_db}
+      POSTGRES_USER: ${DB_USER:-aurora_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-aurora_pass}
+    ports:
+      # "хост:контейнер": 5433 на хосте -> 5432 в контейнере
+      # (взяли 5433, чтобы не конфликтовать с локальным postgres на 5432)
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data            # персистентность данных
+      - ./db/init:/docker-entrypoint-initdb.d:ro   # init-скрипты при первом старте
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-aurora_user} -d ${DB_NAME:-aurora_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [aurora-net]
+
+networks:
+  aurora-net:
+    driver: bridge
+
+volumes:
+  pgdata:

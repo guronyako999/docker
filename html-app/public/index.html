@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurora — Главная</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a class="logo" href="/">✦ AURORA</a>
+    <div>
+      <a class="link" href="/">Главная</a>
+      <a class="link" href="/about.html">О проекте</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">Docker · Nginx · PostgreSQL</span>
+    <h1>Быстро. Красиво. В контейнере.</h1>
+    <p class="sub">
+      Статическое приложение на чистом HTML/CSS/JS, упакованное в Docker-образ с Nginx,
+      работающее в связке с PostgreSQL через docker-compose.
+    </p>
+    <a class="btn btn-primary" href="#status">Проверить базу данных</a>
+    <a class="btn btn-ghost" href="/about.html">Подробнее →</a>
+  </header>
+
+  <section class="cards">
+    <div class="card">
+      <div class="icon">🐳</div>
+      <h3>Docker</h3>
+      <p>Образ на базе <code class="inline">nginx:alpine</code> — лёгкий (~40 МБ) и безопасный.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🚀</div>
+      <h3>Nginx</h3>
+      <p>Раздача статики, gzip-сжатие, кэширование и SPA-fallback из коробки.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🐘</div>
+      <h3>PostgreSQL</h3>
+      <p>Данные проверяются через API backend'а, порты проброшены на хост.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🎨</div>
+      <h3>Тема Aurora</h3>
+      <p>Тёмный дизайн с неоновыми градиентами и glassmorphism-карточками.</p>
+    </div>
+  </section>
+
+  <section class="status-wrap" id="status">
+    <div class="status-box">
+      <h3><span class="dot wait" id="db-dot"></span>Статус подключения к PostgreSQL</h3>
+      <p id="db-msg" style="color:var(--muted)">Загружаю данные…</p>
+      <ul id="db-list"></ul>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Aurora Project · собрано через <code class="inline">docker compose up -d</code>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
