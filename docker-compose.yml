@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     ports:
       # ПРОБРОС ПОРТОВ: "хост:контейнер"
-      # http://localhost:8080  ->  nginx:80 внутри контейнера
+      # http://localhost:${WEB_PORT_HOST} -> nginx:80 внутри контейнера
       # Порт хоста берётся из .env (WEB_PORT_HOST). Если 8080 занят — поменяйте в .env.
       - "${WEB_PORT_HOST:-8080}:80"
     depends_on:
