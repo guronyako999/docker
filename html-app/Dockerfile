@@ -15,8 +15,8 @@ COPY public/ /usr/share/nginx/html/
 
 EXPOSE 80
 
-# healthcheck: nginx жив?
-HEALTHCHECK --interval=15s --timeout=3s --retries=3 \
-  CMD wget -qO- http://localhost/healthz > /dev/null || exit 1
+# healthcheck: nginx жив? (стучится в служебный /healthz, не зависит от backend)
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -q --spider http://127.0.0.1/healthz || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
