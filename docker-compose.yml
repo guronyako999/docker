@@ -49,9 +49,9 @@ services:
       POSTGRES_USER: ${DB_USER:-aurora_user}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-aurora_pass}
     ports:
-      # "хост:контейнер": 5433 на хосте -> 5432 в контейнере
-      # (взяли 5433, чтобы не конфликтовать с локальным postgres на 5432)
-      - "5433:5432"
+      # "хост:контейнер": порт хоста берём из .env (DB_PORT_HOST), по умолчанию 5433.
+      # Если 5433 занят — поменяйте значение в файле .env, пересоздавать образы не нужно.
+      - "${DB_PORT_HOST:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data            # персистентность данных
       - ./db/init:/docker-entrypoint-initdb.d:ro   # init-скрипты при первом старте

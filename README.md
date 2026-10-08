@@ -36,7 +36,7 @@ docker compose ps               # убедиться, что все сервис
 |---------------------------|-----------------------------------------------------------|
 | 🌐 Сайт (nginx)           | http://localhost:8080                                     |
 | 🔌 API статуса БД         | http://localhost:8080/api/db-status                       |
-| 🐘 PostgreSQL с хоста     | `localhost:5433` (user `aurora_user`, pass `aurora_pass`) |
+| 🐘 PostgreSQL с хоста     | `localhost:${DB_PORT_HOST:-5433}` (user `aurora_user`, pass `aurora_pass`) |
 
 Остановить стек: `docker compose down` (добавьте `-v`, чтобы удалить том с данными БД).
 
